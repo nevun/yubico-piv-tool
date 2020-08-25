@@ -28,7 +28,7 @@ jobs:
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1
       with:
-	config-file: ./.github/codeql-config.yml
+        config-file: ./.github/codeql-config.yml
 
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 https://git.io/JvXDl
