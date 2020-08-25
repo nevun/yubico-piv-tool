@@ -1,0 +1,5 @@
+name: "Custom CodeQL config for yubico-piv-tool"
+
+queries:
+  - name: Test running custom QL packs from an external repo
+    uses: Yubico/codeql-custom-queries/cpp/queries/missing_return_check.ql@master
