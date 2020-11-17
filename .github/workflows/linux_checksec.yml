@@ -1,0 +1,37 @@
+name: Exploit mitigations
+# Uses checksec action to check that final build artifacts have sufficient hardering
+on: [pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      # This action checks-out the repository under $GITHUB_WORKSPACE, so the workflow can access it.
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: Install prerequisites
+        run: |
+          set -x
+          sudo apt install libpcsclite-dev check gengetopt help2man openssl opensc
+
+      - name: Build and install
+        run: |
+          set -x
+          mkdir build; cd build
+          cmake .. -DVERBOSE_CMAKE=ON -DCMAKE_BUILD_TYPE=Release
+          make
+          sudo make install
+
+      - uses: nevun/action-checksec@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_COMMENT_URL: ${{ github.event.pull_request.comments_url }}
+        with:
+          executables: |
+            /usr/local/bin/yubico-piv-tool
+          libraries: |
+            /usr/local/lib/libykpiv.so
+            /usr/local/lib/libykcs11.so
+          verbose: on
